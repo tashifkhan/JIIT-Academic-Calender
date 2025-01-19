@@ -1089,7 +1089,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Independence Day",
+		"summary": "Independence Day",
 		"start": {
 			"date": "2024-08-15"
 		},
@@ -1098,7 +1098,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Raksha Bandhan",
+		"summary": "Raksha Bandhan",
 		"start": {
 			"date": "2024-08-19"
 		},
@@ -1107,7 +1107,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Janmashtmi",
+		"summary": "Janmashtmi",
 		"start": {
 			"date": "2024-08-26"
 		},
@@ -1116,7 +1116,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Gandhi Jayanti",
+		"summary": "Gandhi Jayanti",
 		"start": {
 			"date": "2024-10-02"
 		},
@@ -1125,7 +1125,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Dushehra",
+		"summary": "Dushehra",
 		"start": {
 			"date": "2024-10-12"
 		},
@@ -1134,7 +1134,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Diwali",
+		"summary": "Diwali",
 		"start": {
 			"date": "2024-11-01"
 		},
@@ -1143,7 +1143,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Govardhan Puja",
+		"summary": "Govardhan Puja",
 		"start": {
 			"date": "2024-11-02"
 		},
@@ -1152,7 +1152,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Guru Nanak Jayanti",
+		"summary": "Guru Nanak Jayanti",
 		"start": {
 			"date": "2024-11-15"
 		},
@@ -1161,7 +1161,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Christmas",
+		"summary": "Christmas",
 		"start": {
 			"date": "2024-12-25"
 		},
@@ -1170,7 +1170,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Makar Sankranti",
+		"summary": "Makar Sankranti",
 		"start": {
 			"date": "2025-01-14"
 		},
@@ -1179,7 +1179,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Maha Shivratri",
+		"summary": "Maha Shivratri",
 		"start": {
 			"date": "2025-02-26"
 		},
@@ -1188,7 +1188,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Holi",
+		"summary": "Holi",
 		"start": {
 			"date": "2025-03-14"
 		},
@@ -1197,7 +1197,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Id-ul-Fitr (Ramdan)*",
+		"summary": "Id-ul-Fitr (Ramdan)*",
 		"start": {
 			"date": "2025-04-01"
 		},
@@ -1206,7 +1206,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Mahavir Jayanti",
+		"summary": "Mahavir Jayanti",
 		"start": {
 			"date": "2025-04-10"
 		},
@@ -1215,7 +1215,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Ambedkar Jayanti",
+		"summary": "Ambedkar Jayanti",
 		"start": {
 			"date": "2025-04-14"
 		},
@@ -1224,7 +1224,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Republic Day",
+		"summary": "Republic Day",
 		"start": {
 			"date": "2025-01-26"
 		},
@@ -1233,7 +1233,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Ram Navami",
+		"summary": "Ram Navami",
 		"start": {
 			"date": "2025-04-06"
 		},
@@ -1242,7 +1242,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Mid-semester break (Diwali)",
+		"summary": "Mid-semester break (Diwali)",
 		"start": {
 			"date": "2024-10-28"
 		},
@@ -1251,7 +1251,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Vacation",
+		"summary": "Vacation",
 		"start": {
 			"date": "2024-12-15"
 		},
@@ -1260,7 +1260,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Mid-semester break (Holi)",
+		"summary": "Mid-semester break (Holi)",
 		"start": {
 			"date": "2025-03-10"
 		},
@@ -1269,7 +1269,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Summer Vacation",
+		"summary": "Summer Vacation",
 		"start": {
 			"date": "2025-05-22"
 		},
@@ -1278,7 +1278,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Faculty Vacations (Diwali)",
+		"summary": "Faculty Vacations (Diwali)",
 		"start": {
 			"date": "2024-10-28"
 		},
@@ -1287,7 +1287,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Faculty Vacations (Winter)",
+		"summary": "Faculty Vacations (Winter)",
 		"start": {
 			"date": "2024-12-25"
 		},
@@ -1296,7 +1296,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Faculty Vacations (Holi)",
+		"summary": "Faculty Vacations (Holi)",
 		"start": {
 			"date": "2025-03-10"
 		},
@@ -1305,7 +1305,7 @@
 		}
 	},
 	{
-		"summary": "Holiday - Faculty Vacations (Summer)",
+		"summary": "Faculty Vacations (Summer)",
 		"start": {
 			"date": "2025-06-02"
 		},
