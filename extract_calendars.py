@@ -3,7 +3,7 @@ import re
 import json
 from datetime import datetime
 
-def extract_academic_calendar(pdf_path):
+def extract_calendar_data(pdf_path):
     events = []
     holidays = []
 
@@ -14,80 +14,101 @@ def extract_academic_calendar(pdf_path):
             text += page.extract_text()
 
     lines = text.splitlines()
-
     is_holiday_section = False
+
     for i, line in enumerate(lines):
         line = line.strip()
-        if "LIST OF HOLIDAYS" in line:
+        if "List of Holidays" in line:
             is_holiday_section = True
             continue
-
-        if is_holiday_section:
-            if re.match(r'^\d+\.\s+[\w\s()\*]+?\s+\d{1,2}\s+[A-Za-z]{3}\s+\d{4}', line):
-                parts = re.split(r'\s{2,}', line) # Split by multiple spaces
-                if len(parts) >= 2:
-                    event_name_part = parts[0].split('.', 1)[1].strip()
-                    date_part = parts[-1].strip()
+        elif is_holiday_section:
+            if re.match(r'^\d+\.\s+([\w\s()\*]+?)\s+(\d{1,2}\s+[A-Za-z]{3}\s+\d{4})', line):
+                match = re.match(r'^\d+\.\s+([\w\s()\*]+?)\s+(\d{1,2}\s+[A-Za-z]{3}\s+\d{4})', line)
+                if match:
+                    event_name = match.group(1).strip()
+                    date_str = match.group(2).strip()
                     try:
-                        holiday_date = datetime.strptime(date_part, '%d %b %Y').strftime('%Y-%m-%d')
-                        holidays.append({"summary": f"Holiday - {event_name_part}",
+                        holiday_date = datetime.strptime(date_str, '%d %b %Y').strftime('%Y-%m-%d')
+                        holidays.append({"summary": f"Holiday - {event_name}",
+                                        "start": {"date": holiday_date},
+                                        "end": {"date": holiday_date}})
+                    except ValueError:
+                        print(f"Could not parse date for holiday: {line}")
+            elif re.match(r'^\d+\.\s+([\w\s()\*]+?)\s+(\d{1,2}\s+[A-Za-z]{3}\s+\d{4})\s*\(.+\)', line):
+                 match = re.match(r'^\d+\.\s+([\w\s()\*]+?)\s+(\d{1,2}\s+[A-Za-z]{3}\s+\d{4})\s*\(.+\)', line)
+                 if match:
+                    event_name = match.group(1).strip()
+                    date_str = match.group(2).strip()
+                    try:
+                        holiday_date = datetime.strptime(date_str, '%d %b %Y').strftime('%Y-%m-%d')
+                        holidays.append({"summary": f"Holiday - {event_name}",
                                         "start": {"date": holiday_date},
                                         "end": {"date": holiday_date}})
                     except ValueError:
                         print(f"Could not parse date for holiday: {line}")
 
-        elif "SER." not in line and "EVENT" not in line and line and not re.match(r'^==Start of OCR for page \d+==$', line) and not re.match(r'^==End of OCR for page \d+==$', line) and "Updated on" not in line and "JIIT NOIDA" not in line and "ACADEMIC CALENDAR" not in line:
-            date_match_odd = re.search(r'(\d{1,2}\s+[A-Za-z]{3}\s+\d{4})', line)
-            date_match_even = re.search(r'(\d{1,2}\s+[A-Za-z]{3}\s+\d{4})\s*$', line) # Handle end of line for even semester
+        elif "SER." not in line and "Event" not in line and line and not re.match(r'^==Start of OCR for page \d+==$', line) and not re.match(r'^==End of OCR for page \d+==$', line) and "JIIT NOIDA" not in line and "ACADEMIC CALENDAR" not in line and "Only for First Year" not in line and "(EVEN SEMESTER" not in line and "Sr." not in line and "Date" not in line :
+            # Handling Odd Semester PDF
+            date_match = re.search(r'(\d{1,2}\s+[A-Za-z]{3}\s+\d{4})', line)
+            date_range_match = re.search(r'(\d{1,2}-\d{1,2}\s+[A-Za-z]{3}\s+\d{4})', line)
 
-            if date_match_odd:
-                event_name = line.split(date_match_odd.group(1))[0].strip()
+            if date_match:
+                event_name_parts = line.split(date_match.group(1))[0].strip()
+                # Sometimes event name has leading numbers or dots, remove them
+                event_name = re.sub(r'^\d+\.\s*', '', event_name_parts).strip()
                 try:
-                    event_date_str = date_match_odd.group(1)
+                    event_date_str = date_match.group(1)
                     event_date = datetime.strptime(event_date_str, '%d %b %Y').strftime('%Y-%m-%d')
-                    events.append({"summary": event_name,
-                                   "start": {"date": event_date},
-                                   "end": {"date": event_date}})
+                    events.append({"summary": event_name, "start": {"date": event_date}, "end": {"date": event_date}})
                 except ValueError:
-                    print(f"Could not parse date for event (Odd): {line}")
-            elif date_match_even:
-                 parts = line.rsplit(date_match_even.group(1), 1)
-                 if parts:
-                     event_name = parts[0].strip()
-                     try:
-                         event_date_str = date_match_even.group(1)
-                         event_date = datetime.strptime(event_date_str, '%d %b %Y').strftime('%Y-%m-%d')
-                         events.append({"summary": event_name,
-                                        "start": {"date": event_date},
-                                        "end": {"date": event_date}})
-                     except ValueError:
-                         print(f"Could not parse date for event (Even): {line}")
-            elif '–' in line or '-' in line:
-                separator = '–' if '–' in line else '-'
-                parts = line.split(separator)
-                if len(parts) == 2:
-                    event_name_part = parts[0].strip()
-                    date_range_part = parts[1].strip()
+                    print(f"Could not parse date for event: {line}")
+            elif date_range_match:
+                 event_name = line.split(date_range_match.group(1))[0].strip()
+                 date_parts = date_range_match.group(1).split('-')
+                 start_month_year = date_parts[1].split(' ')[1:]
+                 start_date_str = f"{date_parts[0]} {' '.join(start_month_year)}"
+                 end_date_str = date_range_match.group(1).split(' ')[-3:]
+                 end_date_str = ' '.join(end_date_str)
 
-                    date_matches = re.findall(r'(\d{1,2}\s+[A-Za-z]{3}\s+\d{4})', date_range_part)
-                    if len(date_matches) == 2:
-                        try:
-                            start_date_str = date_matches[0]
-                            end_date_str = date_matches[1]
-                            start_date = datetime.strptime(start_date_str, '%d %b %Y').strftime('%Y-%m-%d')
-                            end_date = datetime.strptime(end_date_str, '%d %b %Y').strftime('%Y-%m-%d')
-                            events.append({"summary": event_name_part,
-                                           "start": {"date": start_date},
-                                           "end": {"date": end_date}})
-                        except ValueError:
-                            print(f"Could not parse date range for event: {line}")
+                 try:
+                     start_date = datetime.strptime(start_date_str, '%d %b %Y').strftime('%Y-%m-%d')
+                     end_date = datetime.strptime(end_date_str, '%d %b %Y').strftime('%Y-%m-%d')
+                     events.append({"summary": event_name, "start": {"date": start_date}, "end": {"date": end_date}})
+                 except ValueError:
+                     print(f"Could not parse date range for event: {line}")
+
+        elif "Sr." in line and "Event" in line and "Date" in line:
+            # Skip the header line for the Even Semester table
+            continue
+        elif re.match(r'^\d+\s+[\w\s()]+?\s+\d{1,2}\s+[A-Za-z]{3}\s+\d{4}', line):
+            # Handling Even Semester PDF
+            parts = re.split(r'\s{2,}', line)
+            if len(parts) >= 2:
+                event_name = parts[1].strip()
+                date_str = parts[-1].strip()
+                try:
+                    event_date = datetime.strptime(date_str, '%d %b %Y').strftime('%Y-%m-%d')
+                    events.append({"summary": event_name, "start": {"date": event_date}, "end": {"date": event_date}})
+                except ValueError:
+                    print(f"Could not parse date for even semester event: {line}")
+        elif re.match(r'^\d+\s+\(i\).+', line):
+            # Handling Even Semester detailed events
+            parts = re.split(r'\s{2,}', line)
+            if len(parts) >= 2:
+                event_label_and_name = parts[1].strip()
+                date_str = parts[-1].strip()
+                try:
+                    event_date = datetime.strptime(date_str, '%d %b %Y').strftime('%Y-%m-%d')
+                    events.append({"summary": event_label_and_name, "start": {"date": event_date}, "end": {"date": event_date}})
+                except ValueError:
+                    print(f"Could not parse date for detailed even semester event: {line}")
 
     combined_events = sorted(events + holidays, key=lambda x: x['start']['date'])
-
     return combined_events
 
 if __name__ == "__main__":
-    pdf_file_path = './data/Academic Calendar 2024-25.pdf' 
-    calendar_data = extract_academic_calendar(pdf_file_path)
+    pdf_file_path = './data/Academic Calendar 2024-25.pdf'
+
+    calendar_data = extract_calendar_data(pdf_file_path)
 
     print(json.dumps(calendar_data, indent=2))
